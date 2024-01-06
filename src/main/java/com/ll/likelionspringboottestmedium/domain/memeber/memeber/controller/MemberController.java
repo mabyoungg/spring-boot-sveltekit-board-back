@@ -3,6 +3,8 @@ package com.ll.likelionspringboottestmedium.domain.memeber.memeber.controller;
 
 import com.ll.likelionspringboottestmedium.domain.memeber.memeber.entity.Member;
 import com.ll.likelionspringboottestmedium.domain.memeber.memeber.service.MemberService;
+import com.ll.likelionspringboottestmedium.global.rq.Rq;
+import com.ll.likelionspringboottestmedium.global.rsData.RsData;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    private final Rq rq;
 
     @GetMapping("/join")
     public String showJoin() {
@@ -35,9 +38,8 @@ public class MemberController {
 
     @PostMapping("/join")
     public String join(@Valid JoinForm joinForm) {
-        Member member = memberService.join(joinForm.getUsername(), joinForm.getPassword());
-        long id = member.getId();
+        RsData<Member> joinRs = memberService.join(joinForm.getUsername(), joinForm.getPassword());
 
-        return "redirect:/?msg=No %d member joined.".formatted(id);
+        return rq.redirectOrBack(joinRs, "/member/login");
     }
 }

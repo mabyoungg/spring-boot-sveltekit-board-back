@@ -6,6 +6,9 @@ import com.ll.likelionspringboottestmedium.domain.post.post.entity.Post;
 import com.ll.likelionspringboottestmedium.domain.post.post.service.PostService;
 import com.ll.likelionspringboottestmedium.global.rq.Rq;
 import com.ll.likelionspringboottestmedium.global.rsData.RsData;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
@@ -15,9 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static org.springframework.http.MediaType.ALL_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @RestController
-@RequestMapping("/api/v1/posts")
+@RequestMapping(value = "/api/v1/posts", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@Tag(name = "ApiV1PostController", description = "글 CRUD 컨트롤러")
+@SecurityRequirement(name = "bearerAuth")
 public class ApiV1PostController {
     private final Rq rq;
     private final PostService postService;
@@ -35,7 +43,9 @@ public class ApiV1PostController {
         }
     }
 
-    @GetMapping("")
+    @GetMapping(value = "", consumes = ALL_VALUE)
+    @SecurityRequirement(name = "none")
+    @Operation(summary = "글 리스트")
     public RsData<GetItemsResponseBody> getItems() {
         Member member = rq.getMember();
 
@@ -61,7 +71,8 @@ public class ApiV1PostController {
         }
     }
 
-    @GetMapping( "/mine")
+    @GetMapping(value = "/mine", consumes = ALL_VALUE)
+    @Operation(summary = "내 글 리스트")
     public RsData<GetMineResponseBody> getMine() {
         Member member = rq.getMember();
 

@@ -1,4 +1,4 @@
-package com.ll.likelionspringboottestmedium.global.init;
+package com.ll.likelionspringboottestmedium.global.initData;
 
 import com.ll.likelionspringboottestmedium.domain.memeber.memeber.service.MemberService;
 import lombok.RequiredArgsConstructor;

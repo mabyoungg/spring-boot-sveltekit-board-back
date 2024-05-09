@@ -15,7 +15,7 @@ spring:
     virtual:
       enabled: true
   datasource:
-    url: jdbc:h2:./medium_dev;MODE=MYSQL
+    url: jdbc:h2:./db_dev;MODE=MYSQL
     username: sa
     password:
     driver-class-name: org.h2.Driver
@@ -45,11 +45,15 @@ custom:
     frontUrl: "https://${custom.production.cookieDomain}"
     backUrl: "https://api.${custom.production.cookieDomain}"
   site:
-    name: medium
-    baseUrl: "http://localhost:${server.port}"
     cookieDomain: "${custom.dev.cookieDomain}"
     frontUrl: "${custom.dev.frontUrl}"
     backUrl: "${custom.dev.backUrl}"
-  tempDirPath: c:/temp/medium_dev/temp
+    name: medium
+  jwt:
+    secretKey: ON_SECRET
+  accessToken:
+    expirationSec: '#{60*60}'
+  temp:
+    dirPath: c:/temp/medium_dev/temp
   genFile:
     dirPath: c:/temp/medium_dev

@@ -1,17 +1,16 @@
 package com.ll.likelionspringboottestmedium.domain.post.post.controller;
 
 import com.ll.likelionspringboottestmedium.domain.memeber.memeber.entity.Member;
-import com.ll.likelionspringboottestmedium.domain.post.post.dto.PostDto;
-import com.ll.likelionspringboottestmedium.domain.post.post.entity.Post;
+import com.ll.likelionspringboottestmedium.domain.post.post.dto.PostListItemDto;
 import com.ll.likelionspringboottestmedium.domain.post.post.service.PostService;
 import com.ll.likelionspringboottestmedium.global.rq.Rq;
 import com.ll.likelionspringboottestmedium.global.rsData.RsData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,16 +30,9 @@ public class ApiV1PostController {
     private final PostService postService;
 
     @Getter
+    @AllArgsConstructor
     public static class GetItemsResponseBody {
-        @NonNull
-        private final List<PostDto> items;
-
-        public GetItemsResponseBody(List<Post> posts) {
-            this.items = posts
-                    .stream()
-                    .map(PostDto::new)
-                    .toList();
-        }
+        private final List<PostListItemDto> items;
     }
 
     @GetMapping(value = "", consumes = ALL_VALUE)
@@ -48,7 +40,7 @@ public class ApiV1PostController {
     public RsData<GetItemsResponseBody> getItems() {
         Member member = rq.getMember();
 
-        List<Post> posts = postService.findByPublished(true);
+        List<PostListItemDto> posts = postService.findByPublished(true, PostListItemDto.class);
 
         return RsData.of(
                 "200",
@@ -58,16 +50,9 @@ public class ApiV1PostController {
     }
 
     @Getter
+    @AllArgsConstructor
     public static class GetMineResponseBody {
-        @NonNull
-        private final List<PostDto> items;
-
-        public GetMineResponseBody(List<Post> posts) {
-            this.items = posts
-                    .stream()
-                    .map(PostDto::new)
-                    .toList();
-        }
+        private final List<PostListItemDto> items;
     }
 
     @GetMapping(value = "/mine", consumes = ALL_VALUE)
@@ -75,7 +60,7 @@ public class ApiV1PostController {
     public RsData<GetMineResponseBody> getMine() {
         Member member = rq.getMember();
 
-        List<Post> posts = postService.findByAuthor(member);
+        List<PostListItemDto> posts = postService.findByAuthor(member, PostListItemDto.class);
 
         return RsData.of(
                 "200",

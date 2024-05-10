@@ -20,5 +20,5 @@ public class Post extends BaseTime {
     private Member author;
     private String title;
     private String body;
-    private boolean isPublished;
+    private boolean published;
 }

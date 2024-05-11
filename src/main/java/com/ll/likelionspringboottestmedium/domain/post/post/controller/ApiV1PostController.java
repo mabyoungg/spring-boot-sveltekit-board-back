@@ -8,9 +8,8 @@ import com.ll.likelionspringboottestmedium.global.rsData.RsData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,10 +28,7 @@ public class ApiV1PostController {
     private final Rq rq;
     private final PostService postService;
 
-    @Getter
-    @AllArgsConstructor
-    public static class GetItemsResponseBody {
-        private final List<PostListItemDto> items;
+    public record GetItemsResponseBody(@NonNull List<PostListItemDto> items) {
     }
 
     @GetMapping(value = "", consumes = ALL_VALUE)
@@ -49,10 +45,7 @@ public class ApiV1PostController {
         );
     }
 
-    @Getter
-    @AllArgsConstructor
-    public static class GetMineResponseBody {
-        private final List<PostListItemDto> items;
+    public record GetMineResponseBody(@NonNull List<PostListItemDto> items) {
     }
 
     @GetMapping(value = "/mine", consumes = ALL_VALUE)

@@ -8,7 +8,6 @@ import com.ll.likelionspringboottestmedium.global.security.SecurityUser;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-@Profile("!prod")
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemberService {

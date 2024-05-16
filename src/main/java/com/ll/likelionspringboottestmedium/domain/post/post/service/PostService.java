@@ -1,11 +1,13 @@
 package com.ll.likelionspringboottestmedium.domain.post.post.service;
 
 import com.ll.likelionspringboottestmedium.domain.memeber.memeber.entity.Member;
+import com.ll.likelionspringboottestmedium.domain.post.post.dto.PostListItemDto;
 import com.ll.likelionspringboottestmedium.domain.post.post.entity.Post;
 import com.ll.likelionspringboottestmedium.domain.post.post.entity.PostConfig;
 import com.ll.likelionspringboottestmedium.domain.post.post.repository.PostRepository;
 import com.ll.likelionspringboottestmedium.global.globalMapper.GlobalMapper;
 import com.ll.likelionspringboottestmedium.global.rsData.RsData;
+import com.ll.likelionspringboottestmedium.standard.base.KwTypeV1;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -109,5 +111,9 @@ public class PostService {
         post.setTitle(postConfig.getTitle());
         post.setPublished(postConfig.isOpen());
         post.setBody(postConfig.getBody());
+    }
+
+    public <T extends PostListItemDto> Page<T> findByKw(KwTypeV1 kwType, String kw, Member author, Boolean published, Pageable pageable, Class<T> type) {
+        return postRepository.findByKw(kwType, kw, author, published, pageable, type);
     }
 }

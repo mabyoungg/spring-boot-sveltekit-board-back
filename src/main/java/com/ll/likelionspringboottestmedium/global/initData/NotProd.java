@@ -50,7 +50,7 @@ public class NotProd {
                 postService.write(memberUser2, "제목 5", "내용 5", true);
                 postService.write(memberUser2, "제목 6", "내용 6", false);
 
-                IntStream.rangeClosed(7, 50).forEach(i -> {
+                IntStream.rangeClosed(7, 150).forEach(i -> {
                     postService.write(memberUser3, "제목 " + i, "내용 " + i, true);
                 });
             }

@@ -3,8 +3,10 @@ package com.ll.likelionspringboottestmedium.domain.post.post.controller;
 import com.ll.likelionspringboottestmedium.domain.memeber.memeber.entity.Member;
 import com.ll.likelionspringboottestmedium.domain.post.post.dto.PostDto;
 import com.ll.likelionspringboottestmedium.domain.post.post.dto.PostListItemDto;
+import com.ll.likelionspringboottestmedium.domain.post.post.entity.Post;
 import com.ll.likelionspringboottestmedium.domain.post.post.service.PostService;
 import com.ll.likelionspringboottestmedium.global.exceptions.GlobalException;
+import com.ll.likelionspringboottestmedium.global.globalMapper.GlobalMapper;
 import com.ll.likelionspringboottestmedium.global.rq.Rq;
 import com.ll.likelionspringboottestmedium.global.rsData.RsData;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,6 +30,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class ApiV1PostController {
     private final Rq rq;
     private final PostService postService;
+    private final GlobalMapper globalMapper;
 
     public record GetItemsResponseBody(@NonNull List<PostListItemDto> items) {
     }
@@ -93,6 +96,36 @@ public class ApiV1PostController {
 
         return postRsData.of(
                 new MakeTempResponseBody(postRsData.getData())
+        );
+    }
+
+    public record EditRequestBody(@NonNull String body) {
+    }
+
+    public record EditResponseBody(@NonNull PostDto item) {
+    }
+
+    @PutMapping(value = "/{id}", consumes = ALL_VALUE)
+    @Operation(summary = "글 수정")
+    public RsData<EditResponseBody> edit(
+            @PathVariable long id,
+            @RequestBody EditRequestBody requestBody
+    ) {
+        Optional<Post> opPost = postService.findById(id, Post.class);
+
+        if (opPost.isEmpty())
+            throw new GlobalException("404-1", "글을 찾을 수 없습니다.");
+
+        if (!postService.canEdit(rq.getMember(), opPost.get())) {
+            throw new GlobalException("403-1", "권한이 없습니다.");
+        }
+
+        postService.edit(opPost.get(), requestBody.body);
+
+        return RsData.of(
+                "200",
+                "성공",
+                new EditResponseBody(globalMapper.map(opPost.get(), PostDto.class))
         );
     }
 }
